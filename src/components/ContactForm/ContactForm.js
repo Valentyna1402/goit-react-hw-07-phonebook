@@ -1,6 +1,7 @@
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import Notiflix from 'notiflix';
 
 import { addContact } from 'redux/operations';
 import {
@@ -36,8 +37,8 @@ export const ContactForm = () => {
     );
 
     isOnContacts
-      ? alert(`${name} already in phonebook!`)
-      : dispatch(addContact({name, number}));
+      ? Notiflix.Notify.failure(`${name} already in phonebook!`)
+      : dispatch(addContact({ name, number })) && Notiflix.Notify.success(`${name} added to phonebook!`);
   };
 
   return (
