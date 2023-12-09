@@ -2,7 +2,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addContact, getContacts } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
 import {
   ErrorMessage,
   Field,
@@ -11,6 +11,7 @@ import {
   Button,
   Container,
 } from './ContactForm.styled';
+import { selectContacts } from 'redux/selectors';
 
 const contactsSchema = Yup.object().shape({
   name: Yup.string()
@@ -25,7 +26,7 @@ const contactsSchema = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   const handleSubmit = values => {
     const name = values.name;
@@ -36,7 +37,7 @@ export const ContactForm = () => {
 
     isOnContacts
       ? alert(`${name} already in phonebook!`)
-      : dispatch(addContact(name, number));
+      : dispatch(addContact({name, number}));
   };
 
   return (
