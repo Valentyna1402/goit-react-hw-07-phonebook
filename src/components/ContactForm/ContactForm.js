@@ -29,16 +29,24 @@ export const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
-  const handleSubmit = values => {
+  const handleSubmit = async (values) => {
     const name = values.name;
     const number = values.number;
     const isOnContacts = contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
 
-    isOnContacts
-      ? Notiflix.Notify.failure(`${name} already in phonebook!`)
-      : dispatch(addContact({ name, number })) && Notiflix.Notify.success(`${name} added to phonebook!`);
+    if (isOnContacts) {
+      Notiflix.Notify.failure(`${name} already in phonebook!`);
+      return;
+    }
+
+    try {
+      await dispatch(addContact({ name, number })).unwrap();
+      Notiflix.Notify.success(`${name} added to phonebook!`);
+    } catch (error) {
+      Notiflix.Notify.failure(`Sorry, something went wrong.`);
+    }
   };
 
   return (
